@@ -1,0 +1,31 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UsuarioGestor extends Usuario {
+    
+    // Atributo exclusivo do Gestor
+    private String departamento;
+
+    // Construtor
+    public UsuarioGestor(String login, String senha, String nome, String departamento) {
+        // O 'super' envia login, senha e nome para a classe abstrata Usuario
+        super(login, senha, nome); 
+        
+    }
+
+    // Implementação obrigatória do método abstrato
+    @Override
+    public void acessarSistema() {
+        System.out.println("\n==================================");
+        System.out.println("       PAINEL DE GESTÃO");
+        System.out.println("==================================");
+        System.out.println("Bem-vindo(a), Gestor(a) " + super.getNome() + "!");
+        System.out.println("-> Acesso total a relatórios e métricas concedido.");
+        System.out.println("==================================\n");
+        
+        
+    }
+
+   
+}
