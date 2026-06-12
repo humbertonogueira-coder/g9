@@ -37,10 +37,10 @@ public class RegistroLoginController {
     private static List<String> listaFrota = new ArrayList<>();
     private static List<String> listaSensoresUsuarios = new ArrayList<>();
 
-    // 1. Procure onde estão as listas e adicione a lista de logs logo abaixo delas:
+   
 private static List<String> listaLogs = new ArrayList<>();
 
-// 2. Dentro do bloco "static { ... }", adicione estes logs iniciais para teste:
+
 static {
     listaFrota.add("Placa: ABC-1234 | Modelo: Scania R450 | Sensor: SNSR-01");
     listaFrota.add("Placa: XYZ-9876 | Modelo: Volvo FH540 | Sensor: SNSR-02");
@@ -48,13 +48,13 @@ static {
     listaUsuarios.add("Login: adm | Senha: 123 | Nome: Administrador Geral | Cargo: Administrador");
     listaUsuarios.add("Login: adm1 | Senha: 1234 | Nome: Operador Padrão | Cargo: Operador");
 
-    // ALIMENTAÇÃO INICIAL DE LOGS (NOVO)
+    // ALIMENTAÇÃO INICIAL DE LOGS 
     listaLogs.add("[05/06/2026 10:14] SISTEMA: Inicializado com sucesso.");
     listaLogs.add("[05/06/2026 11:02] LOGIN: Usuário 'adm' efetuou acesso.");
     listaLogs.add("[05/06/2026 14:35] CADASTRO: Novo veículo ABC-1234 adicionado.");
 }
 
-// 3. Lá no final da classe, junto com os outros métodos públicos, adicione estes três:
+
 public static List<String> getListaLogs() {
     return listaLogs;
 }
@@ -87,7 +87,7 @@ public static void limparTodosLogs() {
             return;
         }
 
-        // Passando a senha informada no cadastro para a lista
+        
         adicionarUsuarioLista(usuarioSalvo, senhaSalva, nomeSalvo, cargoSalvo);
 
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
@@ -108,7 +108,7 @@ public static void limparTodosLogs() {
     listaUsuarios.remove(dadosUsuario);
 }
 
-    // Método atualizado para incluir o campo Senha
+    
     public static void adicionarUsuarioLista(String login, String senha, String nome, String cargo) {
         String dadosFormatados = "Login: " + login + " | Senha: " + senha + " | Nome: " + nome + " | Cargo: " + cargo;
         listaUsuarios.add(dadosFormatados);
