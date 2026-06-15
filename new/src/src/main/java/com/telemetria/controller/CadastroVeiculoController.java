@@ -32,12 +32,12 @@ public class CadastroVeiculoController {
             return;
         }
 
-        // Formata os dados digitados em uma única String para salvar na lista
+        
         String dadosVeiculo = "Placa: " + identificador.toUpperCase() + 
                               " | Modelo: " + modelo + 
                               " | Sensor: " + sensor.toUpperCase();
 
-        // ADICIONA NA LISTA GLOBAL
+        
         RegistroLoginController.adicionarVeiculo(dadosVeiculo);
 
         exibirAlerta(Alert.AlertType.INFORMATION, "Sucesso", "Veículo cadastrado e adicionado à frota com sucesso!");
