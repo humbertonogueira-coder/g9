@@ -28,7 +28,7 @@ public class NomeAlterarController {
             return;
         }
 
-        // Atualiza o nome estático lá na classe de Registro
+        
         RegistroLoginController.setNomeSalvo(novoNome);
 
         Alert alertaSucesso = new Alert(Alert.AlertType.INFORMATION);
@@ -37,7 +37,7 @@ public class NomeAlterarController {
         alertaSucesso.setContentText("Nome alterado com sucesso! As alterações serão visíveis ao reabrir o Menu.");
         alertaSucesso.showAndWait();
 
-        // Fecha a janelinha de alteração de dados automaticamente
+      
         Stage stage = (Stage) btnConfirmar.getScene().getWindow();
         stage.close();
     }
