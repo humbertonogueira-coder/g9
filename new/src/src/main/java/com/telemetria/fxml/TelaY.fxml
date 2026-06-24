@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="700.0" spacing="25.0" style="-style: black; -fx-background-color: #2c3e50;" xmlns="http://javafx.com/javafx/23.0.2" xmlns:fx="http://fxml.com/fxml/1" fx:controller="TelaYController">
+   <children>
+      
+      <Label fx:id="labelBoasVindas" text="Bem-vindo ao Painel do Cliente!" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      
+      <Label text="Central de Monitoramento Residencial / Empresarial" textFill="#bdc3c7">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" />
+         </VBox.margin>
+      </Label>
+      
+      <Button mnemonicParsing="false" onAction="#verificarMeusSensores" prefHeight="45.0" prefWidth="270.0" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;" text="Visualizar Meus Sensores" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+
+   </children>
+   <padding>
+      <Insets bottom="20.0" top="20.0" />
+   </padding>
+</VBox>

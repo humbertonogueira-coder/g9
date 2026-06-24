@@ -1,0 +1,110 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+
+public class Veiculo {
+    private int id;
+    private String tipoVeiculo;
+    private String identificador; 
+    private String tipoIdentificador;
+    private boolean alertaPanico;
+    
+    // Utilização da classe Localizacao para uso do GPS.
+    private Localizacao localizacao;
+    
+    private List<Sensor> configuracao = new ArrayList<>();
+    public static int qtdInstancia = 0;
+    
+    public void exibirAviso(String msg) {
+        System.out.println("[VEÍCULO] Painel aceso: " + msg);
+    }
+    
+    public Veiculo (String identificador, String tipoIdentificador, Localizacao loc){
+        this.identificador = identificador;
+        this.tipoIdentificador = tipoIdentificador;
+        this.localizacao = loc;
+        this.id = ++qtdInstancia; // Autoincremento automático
+    }
+
+    public String getIdentificador() { 
+        return identificador; 
+    }
+
+        public String getTipoIdentificador() { 
+        return tipoIdentificador; 
+    }
+    // Métodos delegando a responsabilidade para o objeto localizacao
+    public double getLatitude()  { 
+        return localizacao.latitude(); 
+    }
+    
+    public double getLongitude() { 
+        return localizacao.longitude();
+    }
+    
+    public Localizacao getLocalizacao() {
+        return localizacao; 
+    }
+
+    public void setLocalizacao(Localizacao loc) {
+        this.localizacao = loc;
+        }
+
+    public int getId() { 
+        return id; 
+    }
+    
+    public boolean getAlertaPanico(){
+        return alertaPanico;
+    }
+    
+    //Comportamento do Sensor.
+    public void setSensor(Sensor s) { 
+        this.configuracao.add(s);
+    }
+
+    public void exibirStatusSensores() {
+        System.out.println("\t--- Status Atual do Veículo: " + this.identificador + " ---");
+        if(configuracao.isEmpty()) System.out.println("\t\tNenhum sensor instalado.");
+        for (Sensor s : configuracao) {
+            System.out.println("\t\tSensor: " + s.getId() + "-" + s.getNome() + " | Valor: " + s.getValor());
+        }
+    }
+
+    //Main Veiculo.
+    public static void main (String[] Args) {
+        List<Veiculo> frota = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        String continuar;
+
+        System.out.println("---- Cadastro de veículos ----");
+
+        do {
+            System.out.println("Digite o identificador (Placa/Chassi):");
+            String idInformado = scanner.nextLine();
+            
+            System.out.println("Digite o tipo de identificador:");
+            String tipoIdInformado = scanner.nextLine();
+
+            // Criado um sensor com localização padrão, alterar depois caso um sensor seja adicionado.
+            Localizacao locInicial = new Localizacao(-23.55, -46.63, 0.0, java.time.Instant.now());
+
+            Veiculo v = new Veiculo(idInformado, tipoIdInformado, locInicial);
+            frota.add(v);
+
+            System.out.println("Deseja cadastrar outro veículo? (S/N)");
+            continuar = scanner.nextLine();
+
+        } while (continuar.equalsIgnoreCase("S"));
+        
+        
+
+        System.out.println("\nResumo da Frota:");
+        for (Veiculo v : frota) {
+            System.out.println("ID: " + v.getId() + " | Identificador: " + v.getIdentificador() + " | Mapa: " + v.getLocalizacao().toGoogleMapsUrl());
+        }
+        
+        scanner.close();
+    }
+}

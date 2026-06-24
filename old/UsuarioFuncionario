@@ -1,0 +1,70 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
+
+    public class UsuarioFuncionario{
+    public void Sensor(){
+    Scanner leitor = new Scanner(System.in);
+    List<Veiculo> frota = new ArrayList<>();
+    String continuarVeiculo;
+
+    System.out.println("---- Iniciando o programa ----");
+
+    do {
+        System.out.println("\n--- Cadastro de Veículo ---");
+        System.out.print("Digite o identificador do veículo (ex: ABC-1234): ");
+        String identificador = leitor.nextLine();
+
+        System.out.print("Digite o tipo de identificador (ex: Placa): ");
+        String tipoIdentificador = leitor.nextLine();
+        
+        Localizacao locAtual = new Localizacao(-1.0, -21.34, 0.0, java.time.Instant.now());  
+
+        // (identificador, tipoIdentificador, latitude, longitude)
+        Veiculo v = new Veiculo(identificador, tipoIdentificador, locAtual);
+
+        String continuarSensor;
+        do {
+            System.out.println("\n--- Adicionando Sensor ao Veículo " + identificador + " ---");
+            System.out.print("Categoria (Ex: Motor): ");
+            String cat = leitor.nextLine();
+            
+            System.out.print("Nome do Sensor (Ex: Temperatura): ");
+            String nomeS = leitor.nextLine();
+            
+            System.out.print("Tipo de dado (Ex: 1/0 ou Float): ");
+            String tipoD = leitor.nextLine();
+            
+            System.out.print("Unidade de medida: ");
+            String und = leitor.nextLine();
+            
+             System.out.print("Limite Máximo: ");
+            double limiteMaximo = leitor.nextDouble();
+
+            // Cria o sensor e adiciona ao veículo
+            Sensor s = new Sensor(cat, nomeS, tipoD, und);
+            v.setSensor(s);
+
+            System.out.print("Deseja cadastrar outro SENSOR para este veículo? (S/N): ");
+            continuarSensor = leitor.nextLine();
+        } while (continuarSensor.equalsIgnoreCase("S"));
+
+        // Adiciona o veículo completo à lista
+        frota.add(v);
+
+        System.out.print("\nDeseja cadastrar outro VEÍCULO na frota? (S/N): ");
+        continuarVeiculo = leitor.nextLine();
+
+    } while (continuarVeiculo.equalsIgnoreCase("S"));
+
+    // Exibição final
+    System.out.println("\n---- Relatório de Frota Finalizada ----");
+    for (Veiculo veic : frota) {
+        veic.exibirStatusSensores();
+        System.out.println("---------------------------------------");
+    }
+    
+    leitor.close();
+}
+}

@@ -1,0 +1,182 @@
+    import java.util.Scanner;
+    import java.util.ArrayList;
+    import java.util.List;
+    
+    public class Login{
+        
+        private List<Usuario> usuariosCadastrados = new ArrayList<>();
+        private Scanner scanner = new Scanner (System.in);
+        
+        public Login(){
+            int opcao = -1;
+            
+            while (opcao != 0) {
+                System.out.println("\n ---- Bem-vindo ----");
+                System.out.println("1. Cadastrar Novo Usuário");
+                System.out.println("2. Realizar Login");
+                System.out.println("0. Sair");
+                System.out.print("Escolha: ");
+                opcao = Integer.parseInt(scanner.nextLine());
+                
+                switch (opcao) {
+                    case 1 -> cadastrarUsuario();
+                    case 2 -> realizarLogin();
+                    case 0 -> System.out.println ("Saindo....");
+                    default -> System.out.println("Opção Inválida!");
+                }
+            }
+            
+        }
+        
+         
+        public void cadastrarUsuario(){
+                
+            System.out.println("\n--- NOVO CADASTRO ---");
+            System.out.println("Qual o seu perfil?");
+            System.out.println("1. Gestor");
+            System.out.println("2. Cliente");
+            System.out.print("Opção: ");
+            
+            int tipo = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Nome completo: ");
+            String nome = scanner.nextLine();
+        
+            System.out.print("Senha: ");
+            String senha = scanner.nextLine();
+
+            Usuario novoUsuario = null;
+            String login;
+
+            switch (tipo) {
+                case 1 -> {
+                    System.out.print("Digite seu Código de Acesso (será seu login): ");
+                    login = scanner.nextLine();
+                
+                    System.out.print("Qual o seu departamento? ");
+                    String departamento = scanner.nextLine();
+                
+                    novoUsuario = new UsuarioGestor(login, senha, nome, departamento);
+                }
+                case 2 -> {
+                    System.out.print("Digite seu E-mail ou CPF (será seu login): ");
+                    login = scanner.nextLine();
+                
+                    System.out.print("Qual o seu telefone de contato? ");
+                    String telefone = scanner.nextLine();
+                    
+                    novoUsuario = new UsuarioVeiculo(login, senha, nome);
+                }
+                default -> {
+                    System.out.println("Opção de perfil inválida! Retornando ao menu.");
+                    return;
+                }
+             }
+
+            usuariosCadastrados.add(novoUsuario);
+            System.out.println("\nUsuário " + nome + " cadastrado com sucesso!");
+                
+            }
+            
+             
+            public void realizarLogin(){
+                
+                System.out.println("\n ---- Login ----");
+                
+                System.out.print("Login: ");
+                String loginDigitado = scanner.nextLine();
+                
+                System.out.print("Senha: ");
+                String senhaDigitada = scanner.nextLine();
+                
+                for (Usuario u : usuariosCadastrados) {
+                    
+                if (u.autenticar(loginDigitado, senhaDigitada)) {
+                System.out.println("\nAutenticação realizada com sucesso!");
+                
+                                u.acessarSistema(); 
+                return; 
+                
+                }
+            }
+            System.out.println("Acesso negado: Usuário ou senha incorretos.");
+        }
+        
+    
+    private void menuUsuarioLogado(Usuario usuarioLogado) {
+        int opcao = -1;
+        
+        while (opcao != 0) {
+            System.out.println("\n--- PAINEL DO USUÁRIO ---");
+            System.out.println("Olá, " + usuarioLogado.getNome());
+            System.out.println("1. Acessar Módulo do Sistema (Telemetria/Gestão)");
+            System.out.println("2. Alterar Minha Senha/Nome");
+            System.out.println("3. Excluir Minha Conta");
+            System.out.println("0. Fazer Logout (Sair)");
+            System.out.print("Escolha: ");
+            
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Digite apenas números.");
+                continue;
+            }
+            
+            switch (opcao) {
+                case 1 -> usuarioLogado.acessarSistema(); // O Polimorfismo brilha aqui!
+                case 2 -> alterarMeusDados(usuarioLogado);
+                case 3 -> {
+                    boolean excluiu = excluirMinhaConta(usuarioLogado);
+                    if (excluiu) {
+                        return; // Se excluiu a conta, força o logout voltando pro menu principal
+                    }
+                }
+                case 0 -> System.out.println("Fazendo logout... Retornando ao Menu Principal.");
+                default -> System.out.println("Opção Inválida!");
+                }
+            }
+        }
+
+    private void alterarMeusDados(Usuario usuarioLogado) {
+        System.out.println("\n--- ALTERAR MEUS DADOS ---");
+        System.out.print("Digite o NOVO Nome: ");
+        String novoNome = scanner.nextLine();
+        
+        System.out.print("Digite a NOVA Senha: ");
+        String novaSenha = scanner.nextLine();
+
+        // Pega o e-mail direto do objeto seguro, o usuário não pode digitar o de outra pessoa
+        String emailDoUsuario = usuarioLogado.getLogin(); 
+
+        boolean sucesso = UsuarioDAO.atualizar(emailDoUsuario, novoNome, novaSenha);
+        
+        if (sucesso) {
+            System.out.println("Seus dados foram atualizados com sucesso!");
+        } else {
+            System.out.println("Erro ao atualizar os dados.");
+        }
+    }
+
+    private boolean excluirMinhaConta(Usuario usuarioLogado) {
+        System.out.println("\n--- EXCLUIR MINHA CONTA ---");
+        System.out.println("ATENÇÃO: Essa ação é irreversível e apagará todos os seus veículos!");
+        System.out.print("Digite sua senha novamente para confirmar: ");
+        String senhaConfirmacao = scanner.nextLine();
+        
+        // Dupla verificação de segurança
+        if (usuarioLogado.autenticar(usuarioLogado.getLogin(), senhaConfirmacao)) {
+            
+            boolean sucesso = UsuarioDAO.excluir(usuarioLogado.getLogin());
+            if (sucesso) {
+                System.out.println("Sua conta foi excluída permanentemente. Adeus!");
+                return true; // Retorna true para o menu fazer o logout
+            } else {
+                System.out.println("Ocorreu um erro no banco de dados ao excluir.");
+                return false;
+            }
+        } else {
+            System.out.println("Senha incorreta. Exclusão cancelada.");
+            return false;
+        }
+    }
+}
